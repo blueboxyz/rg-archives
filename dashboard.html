@@ -1,0 +1,945 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RG ARCHIVES – Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #050203;
+      --panel: #12080a;
+      --accent: #ff4b4b;
+      --accent-soft: rgba(255, 75, 75, 0.4);
+      --text: #ffe5e5;
+      --muted: #ffb3b3;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, #2a0a0a 0, #050203 55%),
+        var(--bg);
+      color: var(--text);
+      font-family: "Share Tech Mono", monospace;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1120px;
+      width: 100%;
+      background: var(--panel);
+      border-radius: 14px;
+      border: 1px solid var(--accent-soft);
+      box-shadow:
+        0 0 25px rgba(0, 0, 0, 0.8),
+        0 0 35px rgba(255, 40, 40, 0.25);
+      padding: 20px 20px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .welcome-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #welcomeText {
+      font-size: 18px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    #status {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .timer-block {
+      text-align: right;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    #security-timer {
+      margin-top: 4px;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-shadow: 0 0 8px rgba(255, 70, 70, 0.7);
+    }
+
+    /* TABS */
+    .tabs-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 8px 0 6px;
+    }
+
+    .tab-chip {
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 75, 75, 0.4);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #ffbbbb;
+      cursor: pointer;
+      background: #1b090a;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.15s ease, transform 0.12s ease,
+                  box-shadow 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+    }
+
+    .tab-chip::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%,
+                                  rgba(255, 255, 255, 0.12) 50%,
+                                  transparent 100%);
+      opacity: 0;
+      transform: translateX(-100%);
+      pointer-events: none;
+    }
+
+    .tab-chip:hover::before {
+      opacity: 1;
+      transform: translateX(100%);
+      transition: transform 0.45s ease;
+    }
+
+    .tab-chip:hover {
+      box-shadow: 0 0 10px rgba(255, 75, 75, 0.5);
+      transform: translateY(-1px);
+      border-color: rgba(255, 75, 75, 0.8);
+    }
+
+    .tab-chip.active {
+      background: #260d0e;
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: 0 0 14px rgba(255, 75, 75, 0.6);
+    }
+
+    .tab-chip.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      box-shadow: none;
+      border-color: rgba(255, 75, 75, 0.2);
+    }
+
+    .tab-chip.disabled:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* PANELS */
+    .tabs-content {
+      margin-top: 10px;
+    }
+
+    .tab-panel {
+      display: none;
+      opacity: 0;
+      transform: scale(0.98);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 75, 75, 0.3);
+      background:
+        linear-gradient(135deg, rgba(255, 75, 75, 0.08),
+                              rgba(10, 4, 5, 0.9));
+      padding: 16px 14px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: panelGlitchIn 0.35s ease-out forwards;
+    }
+
+    @keyframes panelGlitchIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.96);
+        filter: blur(2px);
+      }
+      40% {
+        opacity: 0.8;
+        transform: scale(1.01);
+        filter: blur(1px);
+      }
+      70% {
+        opacity: 0.9;
+        transform: scale(0.99);
+        filter: blur(0.3px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .tab-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 75, 75, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 75, 75, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: 0.25;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+
+    .panel-header {
+      font-size: 12px;
+      color: #ffbbbb;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 8px;
+    }
+
+    .panel-subline {
+      font-size: 10px;
+      color: #ff8f8f;
+      opacity: 0.85;
+      margin-bottom: 10px;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card {
+      border-radius: 8px;
+      border: 1px solid rgba(255, 75, 75, 0.45);
+      background: rgba(10, 3, 4, 0.9);
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .stat-label {
+      font-size: 10px;
+      color: #ff9f9f;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 14px;
+      color: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+      font-size: 12px;
+    }
+
+    th {
+      text-align: left;
+      padding: 8px;
+      background: rgba(36, 12, 13, 0.9);
+      color: #ffbbbb;
+      border-bottom: 1px solid rgba(255, 75, 75, 0.4);
+    }
+
+    td {
+      padding: 7px 8px;
+      border-bottom: 1px solid rgba(255, 75, 75, 0.16);
+    }
+
+    tr:nth-child(even) td {
+      background: rgba(10, 4, 5, 0.7);
+    }
+
+    tr:nth-child(odd) td {
+      background: rgba(6, 2, 3, 0.7);
+    }
+
+    .leaderboard-row {
+      transition: transform 0.6s ease, opacity 0.4s ease;
+      position: relative;
+    }
+
+    .leaderboard-row.top-1 {
+      background: rgba(255, 226, 90, 0.15) !important;
+      box-shadow: 0 0 12px rgba(255, 200, 0, 0.45);
+    }
+
+    .leaderboard-row.top-1 td {
+      color: #ffe15a !important;
+      text-shadow: 0 0 8px rgba(255, 230, 120, 0.7);
+      font-weight: bold;
+    }
+
+    .manage-btn {
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: 1px solid var(--accent);
+      background: #1a0203;
+      color: #ffb3b3;
+      cursor: pointer;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .manage-btn.disabled {
+      background: #2a0b0c;
+      border-color: #552222;
+      color: #744;
+      cursor: not-allowed;
+    }
+
+    .logout-btn {
+      margin-top: 16px;
+      padding: 9px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--accent);
+      background: #1a0203;
+      color: #ffb3b3;
+      cursor: pointer;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+
+    .logout-btn:hover {
+      background: #260506;
+      box-shadow: 0 0 12px rgba(255, 75, 75, 0.45);
+    }
+
+    .small-note {
+      font-size: 10px;
+      color: #ff9f9f;
+      margin-top: 8px;
+      opacity: 0.9;
+    }
+
+    /* SPLASH SCREEN */
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      background: #050203;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .splash-text {
+      font-size: 20px;
+      color: #ff4b4b;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-align: center;
+      opacity: 0;
+      animation: splashFadeIn 0.6s forwards;
+    }
+
+    @keyframes splashFadeIn {
+      to { opacity: 1; }
+    }
+
+    @keyframes splashFadeOut {
+      from { opacity: 1; filter: none; }
+      to { opacity: 0; filter: blur(3px); }
+    }
+
+    @media (max-width: 768px) {
+      .header-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .timer-block {
+        text-align: left;
+      }
+      .tabs-row {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Splash -->
+  <div id="splash" class="splash-screen">
+    <div id="splashText" class="splash-text"></div>
+  </div>
+
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header-row">
+      <div class="welcome-block">
+        <div id="welcomeText">WELCOME</div>
+        <div id="status">SESSION STATUS: Checking…</div>
+      </div>
+      <div class="timer-block">
+        <div>SECURITY HEARTBEAT: 10s INTERVAL</div>
+        <div id="security-timer">SECURITY CHECK IN – 10</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-row">
+      <button class="tab-chip active" data-tab="profile">&lt; PROFILE &gt;</button>
+      <button class="tab-chip" data-tab="leaderboard">&lt; LEADERBOARD &gt;</button>
+      <button class="tab-chip" data-tab="active">&lt; ACTIVE MEMBERS &gt;</button>
+      <button id="manageTabBtn" class="tab-chip disabled" data-tab="manage">&lt; MANAGE &gt;</button>
+      <button class="tab-chip" data-tab="settings">&lt; SETTINGS &gt;</button>
+    </div>
+
+    <!-- PANELS -->
+    <div class="tabs-content">
+      <!-- PROFILE TAB -->
+      <div id="tab-profile" class="tab-panel active">
+        <div class="panel-header">SECTION: USER_PROFILE</div>
+        <div class="panel-subline">NODE: RG-ARC-CLIENT // STATUS: LINKED</div>
+
+        <div class="panel-grid">
+          <div class="stat-card">
+            <div class="stat-label">UserID</div>
+            <div class="stat-value" id="uiUserID">…</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Rank</div>
+            <div class="stat-value" id="uiRank">…</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Usage Count</div>
+            <div class="stat-value" id="uiUsage">…</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">RGPOINTS</div>
+            <div class="stat-value" id="uiPoints">0</div>
+          </div>
+        </div>
+
+        <div class="small-note">
+          This profile panel reflects data tied directly to your active license key and device assignment.
+        </div>
+
+        <button class="logout-btn" onclick="logout()">LOG OUT</button>
+      </div>
+
+      <!-- LEADERBOARD TAB -->
+      <div id="tab-leaderboard" class="tab-panel">
+        <div class="panel-header">SECTION: LEADERBOARD</div>
+        <div class="panel-subline">NODE: RG-ARC-SCORES // ORDER: RGPOINTS DESCENDING</div>
+
+        <table id="leaderboardTable">
+          <tr><th>#</th><th>UserID</th><th>RGPOINTS</th></tr>
+        </table>
+
+        <div class="small-note">
+          Leaderboard refreshes automatically every 10 seconds.
+        </div>
+      </div>
+
+      <!-- ACTIVE MEMBERS TAB -->
+      <div id="tab-active" class="tab-panel">
+        <div class="panel-header">SECTION: ACTIVE MEMBERS</div>
+        <div class="panel-subline">NODE: RG-ARC-ACTIVE // GLOBAL ESTIMATE STREAM</div>
+
+        <div class="stat-card" style="margin-bottom:12px;">
+          <div class="stat-label">Estimated Active Members</div>
+          <div class="stat-value" id="activeMembersCount">0</div>
+        </div>
+
+        <table id="regionTable">
+          <tr><th>Region</th><th>Estimate</th></tr>
+        </table>
+
+        <div class="small-note">
+          These values update automatically to reflect global activity across all RG ARCHIVES nodes.
+        </div>
+      </div>
+
+      <!-- MANAGE TAB -->
+      <div id="tab-manage" class="tab-panel">
+        <div class="panel-header">SECTION: MANAGE MEMBERS</div>
+        <div class="panel-subline">NODE: RG-ARC-MEMBERSHIP // OWNER ACCESS REQUIRED</div>
+
+        <table id="membersTable">
+          <tr><th>UserID</th><th>Device</th><th>Rank</th><th>Manage</th></tr>
+        </table>
+
+        <div class="small-note">
+          Only Owner accounts may modify user permissions.
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div id="tab-settings" class="tab-panel">
+        <div class="panel-header">SECTION: SETTINGS</div>
+        <div class="panel-subline">NODE: RG-ARC-CLIENT_PREFS // STATUS: LIMITED</div>
+
+        <div class="panel-grid">
+          <div class="stat-card">
+            <div class="stat-label">Client Node</div>
+            <div class="stat-value">RG-ARC-NODE-01</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Auth Mode</div>
+            <div class="stat-value">License Key + Device Lock</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Heartbeat Interval</div>
+            <div class="stat-value">10 seconds</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Session Scope</div>
+            <div class="stat-value">Current Browser Context</div>
+          </div>
+        </div>
+
+        <div class="small-note">
+          Additional configurable options for RG ARCHIVES may be exposed here in future revisions of the client.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    /* ---------------------------
+       SAFE SESSION VALIDATION
+    ---------------------------- */
+    let sessionRaw = localStorage.getItem("rg_session");
+
+    if (!sessionRaw) {
+      window.location.href = "login.html";
+    }
+
+    let session;
+    try {
+      session = JSON.parse(sessionRaw);
+    } catch (err) {
+      localStorage.removeItem("rg_session");
+      window.location.href = "login.html";
+    }
+
+    if (!session || typeof session !== "object" || !session.timestamp || !session.key) {
+      localStorage.removeItem("rg_session");
+      window.location.href = "login.html";
+    }
+
+    const MAX_AGE = 24 * 60 * 60 * 1000;
+    if (Date.now() - session.timestamp > MAX_AGE) {
+      localStorage.removeItem("rg_session");
+      window.location.href = "login.html";
+    }
+
+    const currentKey = session.key;
+
+    if (!localStorage.device_id) {
+      localStorage.device_id = crypto.randomUUID();
+    }
+    const device_id = localStorage.device_id;
+
+    /* ---------------------------
+       SUPABASE CLIENT
+    ---------------------------- */
+    const supabase = window.supabase.createClient(
+      "https://ujetrtpzftebyxxlwubj.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqZXRydHB6ZnRlYnl4eGx3dWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NTg0MjUsImV4cCI6MjA4MDUzNDQyNX0.aERqN4rFUkyza4hVvua4Cgtpw8Idjg2AVtN0VUz6yZk"
+    );
+
+    let currentUserRecord = null;
+    const welcomeText = document.getElementById("welcomeText");
+    const statusEl = document.getElementById("status");
+
+    /* ---------------------------
+       SMOOTH NUMBER TWEEN (5s)
+    ---------------------------- */
+    function tweenNumber(element, start, end, duration = 5000) {
+      const diff = end - start;
+      const startTime = performance.now();
+
+      function update(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = progress; // linear
+
+        element.textContent = Math.floor(start + diff * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
+    }
+
+    /* ---------------------------
+       SPLASH SEQUENCE
+    ---------------------------- */
+    let splashRan = false;
+
+    function typeText(element, text, speed = 45) {
+      return new Promise(resolve => {
+        let i = 0;
+        const timer = setInterval(() => {
+          element.textContent = text.slice(0, i);
+          i++;
+          if (i > text.length) {
+            clearInterval(timer);
+            resolve();
+          }
+        }, speed);
+      });
+    }
+
+    async function runSplashSequence(userName, firstTime) {
+      if (splashRan) return;
+      splashRan = true;
+
+      const splash = document.getElementById("splash");
+      const txt = document.getElementById("splashText");
+      if (!splash || !txt) return;
+
+      await typeText(txt, "BOOTING RG ARCHIVES CLIENT...", 40);
+      await new Promise(r => setTimeout(r, 300));
+      await typeText(txt, "VERIFYING SESSION...", 40);
+      await new Promise(r => setTimeout(r, 250));
+
+      if (firstTime) {
+        await typeText(txt, `WELCOME, ${userName}`, 40);
+      } else {
+        await typeText(txt, `WELCOME BACK, ${userName}`, 40);
+      }
+
+      await new Promise(r => setTimeout(r, 450));
+
+      splash.style.animation = "splashFadeOut 0.6s forwards";
+      setTimeout(() => {
+        splash.remove();
+      }, 650);
+    }
+
+    /* ---------------------------
+       TABS LOGIC
+    ---------------------------- */
+    const tabButtons = document.querySelectorAll(".tab-chip");
+    const panels = {
+      profile: document.getElementById("tab-profile"),
+      leaderboard: document.getElementById("tab-leaderboard"),
+      active: document.getElementById("tab-active"),
+      manage: document.getElementById("tab-manage"),
+      settings: document.getElementById("tab-settings"),
+    };
+
+    function setActiveTab(name) {
+      // Prevent switching to manage if disabled
+      if (name === "manage") {
+        const manageBtn = document.getElementById("manageTabBtn");
+        if (manageBtn && manageBtn.classList.contains("disabled")) {
+          return;
+        }
+      }
+
+      tabButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === name);
+      });
+
+      Object.entries(panels).forEach(([key, panel]) => {
+        if (key === name) panel.classList.add("active");
+        else panel.classList.remove("active");
+      });
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
+    });
+
+    /* ---------------------------
+       ACTIVE MEMBERS (FAKE GLOBAL)
+    ---------------------------- */
+    function randomActiveMembers() {
+      // Between 1,893,473 and 2,879,322
+      return Math.floor(Math.random() * (2879322 - 1893473 + 1)) + 1893473;
+    }
+
+    function randomRegions(total) {
+      const regions = ["North America","Europe","Asia","South America","Africa","Oceania"];
+
+      let weights = regions.map(() => Math.random());
+      let sum = weights.reduce((a,b) => a+b, 0);
+      weights = weights.map(w => w / sum);
+
+      let remaining = total;
+      const out = [];
+
+      regions.forEach((r, i) => {
+        let count = i === regions.length - 1
+          ? remaining
+          : Math.floor(weights[i] * total);
+        remaining -= count;
+        out.push({ region: r, count });
+      });
+
+      return out;
+    }
+
+    function updateActiveMembers() {
+      const el = document.getElementById("activeMembersCount");
+      const oldVal = parseInt(el.textContent.replace(/\D/g, ""), 10) || 0;
+      const newVal = randomActiveMembers();
+
+      tweenNumber(el, oldVal, newVal, 5000);
+
+      const regionTable = document.getElementById("regionTable");
+      const regions = randomRegions(newVal);
+
+      regionTable.innerHTML = `<tr><th>Region</th><th>Estimate</th></tr>`;
+
+      regions.forEach(r => {
+        regionTable.innerHTML += `
+          <tr>
+            <td>${r.region}</td>
+            <td>${r.count.toLocaleString()}</td>
+          </tr>`;
+      });
+    }
+
+    /* ---------------------------
+       LOAD USER INFO
+    ---------------------------- */
+    async function loadUserInfo() {
+      const { data, error } = await supabase
+        .from("license_keys")
+        .select("*")
+        .eq("key", currentKey)
+        .single();
+
+      if (error || !data) {
+        logout();
+        return;
+      }
+
+      currentUserRecord = data;
+
+      const firstTime = data.usage_count <= 1;
+      runSplashSequence(data.UserID, firstTime);
+
+      welcomeText.textContent = firstTime
+        ? `WELCOME, ${data.UserID}`
+        : `WELCOME BACK, ${data.UserID}`;
+
+      document.getElementById("uiUserID").textContent = data.UserID;
+      document.getElementById("uiRank").textContent = data.RANK;
+      document.getElementById("uiUsage").textContent = data.usage_count;
+
+      const ptEl = document.getElementById("uiPoints");
+      let currentPts = parseInt(ptEl.textContent.replace(/\D/g, ""), 10);
+      if (isNaN(currentPts)) currentPts = 0;
+      tweenNumber(ptEl, currentPts, data.RGPOINTS, 5000);
+
+      // Enable Manage tab visually for Owner
+      const manageBtn = document.getElementById("manageTabBtn");
+      if (manageBtn) {
+        if (data.RANK === "Owner") {
+          manageBtn.classList.remove("disabled");
+        } else {
+          manageBtn.classList.add("disabled");
+        }
+      }
+    }
+
+    /* ---------------------------
+       LEADERBOARD WITH FLIP + TWEEN
+       (EXCLUDES BLACKLISTED)
+    ---------------------------- */
+    async function loadLeaderboard() {
+      const { data, error } = await supabase
+        .from("license_keys")
+        .select("UserID, RGPOINTS")
+        .eq("is_blacklisted", false)
+        .order("RGPOINTS", { ascending: false });
+
+      if (error) return;
+
+      const table = document.getElementById("leaderboardTable");
+
+      const oldRows = {};
+      Array.from(table.querySelectorAll("tr.leaderboard-row")).forEach(row => {
+        const user = row.dataset.user;
+        oldRows[user] = row.getBoundingClientRect().top;
+      });
+
+      table.innerHTML = `<tr><th>#</th><th>UserID</th><th>RGPOINTS</th></tr>`;
+
+      (data || []).forEach((row, index) => {
+        const tr = document.createElement("tr");
+        tr.classList.add("leaderboard-row");
+        tr.dataset.user = row.UserID;
+        if (index === 0) tr.classList.add("top-1");
+
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${row.UserID}</td>
+          <td class="pointsCell">${row.RGPOINTS}</td>
+        `;
+
+        table.appendChild(tr);
+      });
+
+      requestAnimationFrame(() => {
+        const newRows = Array.from(table.querySelectorAll("tr.leaderboard-row"));
+
+        newRows.forEach(row => {
+          const user = row.dataset.user;
+          const oldTop = oldRows[user];
+          const newTop = row.getBoundingClientRect().top;
+
+          if (oldTop !== undefined) {
+            const delta = oldTop - newTop;
+            row.style.transform = `translateY(${delta}px)`;
+
+            requestAnimationFrame(() => {
+              row.style.transform = "translateY(0)";
+            });
+          }
+        });
+
+        table.querySelectorAll(".top-1").forEach(el => el.classList.remove("top-1"));
+        if (newRows.length > 0) newRows[0].classList.add("top-1");
+      });
+
+      const pointCells = table.querySelectorAll(".pointsCell");
+      (data || []).forEach((row, index) => {
+        const valEl = pointCells[index];
+        if (!valEl) return;
+        let oldVal = parseInt(valEl.textContent.replace(/\D/g, ""), 10);
+        if (isNaN(oldVal)) oldVal = 0;
+        tweenNumber(valEl, oldVal, row.RGPOINTS, 5000);
+      });
+    }
+
+    /* ---------------------------
+       MANAGE MEMBERS (REAL USERS)
+    ---------------------------- */
+    async function loadMembers() {
+      if (!currentUserRecord) return;
+
+      const { data, error } = await supabase
+        .from("license_keys")
+        .select("UserID, assigned_device_id, RANK");
+
+      if (error) return;
+
+      const table = document.getElementById("membersTable");
+      table.innerHTML =
+        `<tr><th>UserID</th><th>Device</th><th>Rank</th><th>Manage</th></tr>`;
+
+      (data || []).forEach(row => {
+        const disabled = currentUserRecord.RANK !== "Owner";
+        table.innerHTML += `
+          <tr>
+            <td>${row.UserID}</td>
+            <td>${row.assigned_device_id || "None"}</td>
+            <td>${row.RANK}</td>
+            <td><button class="manage-btn ${disabled ? "disabled" : ""}">Manage</button></td>
+          </tr>`;
+      });
+    }
+
+    /* ---------------------------
+       HEARTBEAT SECURITY CHECK
+    ---------------------------- */
+    async function heartbeat() {
+      const { data, error } = await supabase.rpc("validate_license_key", {
+        input_key: currentKey,
+        device_id
+      });
+
+      if (error || !data) {
+        statusEl.textContent = "SESSION STATUS: ERROR";
+        return;
+      }
+
+      if (data.status === "valid") {
+        statusEl.textContent = "SESSION STATUS: ACTIVE";
+        return;
+      }
+
+      alert("Security violation detected. Logging out.");
+      logout();
+    }
+
+    /* ---------------------------
+       COUNTDOWN TIMER
+    ---------------------------- */
+    let countdown = 10;
+    const timerEl = document.getElementById("security-timer");
+
+    function updateTimer() {
+      timerEl.textContent = `SECURITY CHECK IN – ${countdown}`;
+      countdown--;
+      if (countdown < 0) {
+        countdown = 10;
+        heartbeat();
+      }
+    }
+
+    setInterval(updateTimer, 1000);
+    heartbeat();
+
+    /* ---------------------------
+       INITIAL LOAD + INTERVALS
+    ---------------------------- */
+    loadUserInfo().then(() => {
+      loadLeaderboard();
+      loadMembers();
+      updateActiveMembers();
+    });
+
+    setInterval(loadUserInfo, 10000);
+    setInterval(loadLeaderboard, 10000);
+    setInterval(loadMembers, 10000);
+    setInterval(updateActiveMembers, 10000);
+
+    /* ---------------------------
+       LOGOUT
+    ---------------------------- */
+    function logout() {
+      localStorage.removeItem("rg_session");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>

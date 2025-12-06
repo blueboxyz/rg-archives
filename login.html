@@ -5,7 +5,6 @@
   <title>RG ARCHIVES – Access Terminal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tactical monospace font -->
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 
   <style>
@@ -36,7 +35,6 @@
       overflow: hidden;
     }
 
-    /* GRID BACKGROUND */
     body::before {
       content: "";
       position: fixed;
@@ -50,7 +48,6 @@
       z-index: -1;
     }
 
-    /* SPLASH SCREEN */
     #splash {
       position: fixed;
       inset: 0;
@@ -63,7 +60,6 @@
       overflow: hidden;
     }
 
-    /* Distortion ripple overlay */
     #ripple {
       position: absolute;
       width: 600px;
@@ -133,7 +129,6 @@
 
     @keyframes spin { 0%{transform:rotate(0);}100%{transform:rotate(360deg);} }
 
-    /* CONSOLE */
     .console {
       width: 100%;
       max-width: 480px;
@@ -152,7 +147,6 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* SCANLINES */
     .console::before {
       content: "";
       position: absolute;
@@ -170,7 +164,6 @@
 
     @keyframes scan { 0%{transform:translateY(0);}100%{transform:translateY(3px);} }
 
-    /* HEADER */
     .console-header {
       display: flex;
       justify-content: space-between;
@@ -204,7 +197,6 @@
       margin-bottom: 10px;
     }
 
-    /* INPUT */
     .field-label {
       font-size: 12px;
       color: #e39c9c;
@@ -245,7 +237,6 @@
 
     button:hover { box-shadow: 0 0 10px rgba(255,75,75,0.4); transform: translateY(-1px); }
 
-    /* TERMINAL */
     .terminal {
       margin-top: 12px;
       background: #0b0405;
@@ -262,7 +253,6 @@
     .terminal-line-error { color: var(--danger); }
     .terminal-line-success { color: var(--accent); }
 
-    /* FOOTER */
     .rg-footer {
       margin-top: 14px;
       text-align: center;
@@ -282,7 +272,6 @@
 
 <body>
 
-<!-- SPLASH SCREEN -->
 <div id="splash">
   <div id="ripple"></div>
   <div class="splash-content">
@@ -292,12 +281,10 @@
   </div>
 </div>
 
-<!-- AUDIO FOR BEEP / STATIC -->
 <audio id="bootSound">
   <source src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=" type="audio/wav">
 </audio>
 
-<!-- MAIN CONSOLE -->
 <div class="console">
   <div class="console-header">
     <div class="console-title">RG ARCHIVES // ACCESS NODE #01</div>
@@ -320,8 +307,6 @@
   <div class="rg-footer">RG ARCHIVES // SECURE DATABASE NETWORK</div>
 </div>
 
-
-<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -376,7 +361,6 @@
     }
   })();
 
-
 async function login() {
     const key = document.getElementById("keyInput").value.trim();
     const msg = document.getElementById("message");
@@ -409,7 +393,6 @@ async function login() {
         return;
     }
 
-    // Normalize status format — handles both object, array, and direct string
     const status =
         data?.status ||
         data?.result?.status ||
@@ -418,7 +401,6 @@ async function login() {
 
     console.log("RPC STATUS:", status);
 
-    // ---- VALID ----
     if (status === "valid") {
         msg.textContent = "ACCESS GRANTED";
         msg.style.color = "var(--accent)";
@@ -435,10 +417,9 @@ async function login() {
             window.location.href = "dashboard.html";
         }, 800);
 
-        return; // <-- stops here
+        return;
     }
 
-    // ---- INVALID ----
     if (status === "invalid") {
         msg.textContent = "INVALID KEY";
         msg.style.color = "var(--danger)";
@@ -446,7 +427,6 @@ async function login() {
         return;
     }
 
-    // ---- BLACKLISTED ----
     if (status === "blacklisted") {
         msg.textContent = "KEY BLACKLISTED";
         msg.style.color = "var(--warn)";
@@ -454,7 +434,6 @@ async function login() {
         return;
     }
 
-    // ---- ANYTHING ELSE ----
     msg.textContent = "UNKNOWN RESPONSE";
     msg.style.color = "var(--warn)";
     log("Unexpected server status.", "error");

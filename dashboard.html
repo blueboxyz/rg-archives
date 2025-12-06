@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +47,6 @@
       overflow: hidden;
     }
 
-    /* HEADER */
     .header-row {
       display: flex;
       justify-content: space-between;
@@ -89,7 +87,6 @@
       text-shadow: 0 0 8px rgba(255, 70, 70, 0.7);
     }
 
-    /* TABS */
     .tabs-row {
       display: flex;
       justify-content: center;
@@ -156,7 +153,6 @@
       box-shadow: none;
     }
 
-    /* PANELS */
     .tabs-content {
       margin-top: 10px;
     }
@@ -350,7 +346,6 @@
       opacity: 0.9;
     }
 
-    /* SPLASH SCREEN */
     .splash-screen {
       position: fixed;
       inset: 0;
@@ -396,13 +391,11 @@
 </head>
 
 <body>
-  <!-- Splash -->
   <div id="splash" class="splash-screen">
     <div id="splashText" class="splash-text"></div>
   </div>
 
   <div class="container">
-    <!-- HEADER -->
     <div class="header-row">
       <div class="welcome-block">
         <div id="welcomeText">WELCOME</div>
@@ -414,7 +407,6 @@
       </div>
     </div>
 
-    <!-- TABS -->
     <div class="tabs-row">
       <button class="tab-chip active" data-tab="profile">&lt; PROFILE &gt;</button>
       <button class="tab-chip" data-tab="leaderboard">&lt; LEADERBOARD &gt;</button>
@@ -423,9 +415,7 @@
       <button class="tab-chip" data-tab="settings">&lt; SETTINGS &gt;</button>
     </div>
 
-    <!-- PANELS -->
     <div class="tabs-content">
-      <!-- PROFILE TAB -->
       <div id="tab-profile" class="tab-panel active">
         <div class="panel-header">SECTION: USER_PROFILE</div>
         <div class="panel-subline">NODE: RG-ARC-CLIENT // STATUS: LINKED</div>
@@ -456,7 +446,6 @@
         <button class="logout-btn" onclick="logout()">LOG OUT</button>
       </div>
 
-      <!-- LEADERBOARD TAB -->
       <div id="tab-leaderboard" class="tab-panel">
         <div class="panel-header">SECTION: LEADERBOARD</div>
         <div class="panel-subline">NODE: RG-ARC-SCORES // ORDER: RGPOINTS DESCENDING</div>
@@ -470,7 +459,6 @@
         </div>
       </div>
 
-      <!-- ACTIVE MEMBERS TAB -->
       <div id="tab-active" class="tab-panel">
         <div class="panel-header">SECTION: ACTIVE MEMBERS</div>
         <div class="panel-subline">NODE: RG-ARC-ACTIVE // GLOBAL ESTIMATE STREAM</div>
@@ -489,7 +477,6 @@
         </div>
       </div>
 
-      <!-- MANAGE TAB -->
       <div id="tab-manage" class="tab-panel">
         <div class="panel-header">SECTION: MANAGE MEMBERS</div>
         <div class="panel-subline">NODE: RG-ARC-MEMBERSHIP // OWNER ACCESS REQUIRED</div>
@@ -503,7 +490,6 @@
         </div>
       </div>
 
-      <!-- SETTINGS TAB -->
       <div id="tab-settings" class="tab-panel">
         <div class="panel-header">SECTION: SETTINGS</div>
         <div class="panel-subline">NODE: RG-ARC-CLIENT_PREFS // STATUS: LIMITED</div>
@@ -537,9 +523,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-    /* ---------------------------
-       SAFE SESSION VALIDATION
-    ---------------------------- */
     let sessionRaw = localStorage.getItem("rg_session");
 
     if (!sessionRaw) {
@@ -572,9 +555,6 @@
     }
     const device_id = localStorage.device_id;
 
-    /* ---------------------------
-       SUPABASE CLIENT
-    ---------------------------- */
     const supabase = window.supabase.createClient(
       "https://ujetrtpzftebyxxlwubj.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqZXRydHB6ZnRlYnl4eGx3dWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NTg0MjUsImV4cCI6MjA4MDUzNDQyNX0.aERqN4rFUkyza4hVvua4Cgtpw8Idjg2AVtN0VUz6yZk"
@@ -584,30 +564,20 @@
     const welcomeText = document.getElementById("welcomeText");
     const statusEl = document.getElementById("status");
 
-    /* ---------------------------
-       SMOOTH NUMBER TWEEN (5s)
-    ---------------------------- */
     function tweenNumber(element, start, end, duration = 5000) {
       const diff = end - start;
       const startTime = performance.now();
 
       function update(now) {
         const progress = Math.min((now - startTime) / duration, 1);
-        const eased = progress; // linear
-
+        const eased = progress;
         element.textContent = Math.floor(start + diff * eased);
-
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        }
+        if (progress < 1) requestAnimationFrame(update);
       }
 
       requestAnimationFrame(update);
     }
 
-    /* ---------------------------
-       SPLASH SEQUENCE
-    ---------------------------- */
     let splashRan = false;
 
     function typeText(element, text, speed = 45) {
@@ -637,23 +607,15 @@
       await typeText(txt, "VERIFYING SESSION...", 40);
       await new Promise(r => setTimeout(r, 250));
 
-      if (firstTime) {
-        await typeText(txt, `WELCOME, ${userName}`, 40);
-      } else {
-        await typeText(txt, `WELCOME BACK, ${userName}`, 40);
-      }
+      if (firstTime) await typeText(txt, `WELCOME, ${userName}`, 40);
+      else await typeText(txt, `WELCOME BACK, ${userName}`, 40);
 
       await new Promise(r => setTimeout(r, 450));
 
       splash.style.animation = "splashFadeOut 0.6s forwards";
-      setTimeout(() => {
-        splash.remove();
-      }, 650);
+      setTimeout(() => splash.remove(), 650);
     }
 
-    /* ---------------------------
-       TABS LOGIC
-    ---------------------------- */
     const tabButtons = document.querySelectorAll(".tab-chip");
     const panels = {
       profile: document.getElementById("tab-profile"),
@@ -664,12 +626,9 @@
     };
 
     function setActiveTab(name) {
-      // Prevent switching to manage if disabled
       if (name === "manage") {
         const manageBtn = document.getElementById("manageTabBtn");
-        if (manageBtn && manageBtn.classList.contains("disabled")) {
-          return;
-        }
+        if (manageBtn && manageBtn.classList.contains("disabled")) return;
       }
 
       tabButtons.forEach(btn => {
@@ -686,17 +645,12 @@
       btn.addEventListener("click", () => setActiveTab(btn.dataset.tab));
     });
 
-    /* ---------------------------
-       ACTIVE MEMBERS (FAKE GLOBAL)
-    ---------------------------- */
     function randomActiveMembers() {
-      // Between 1,893,473 and 2,879,322
       return Math.floor(Math.random() * (2879322 - 1893473 + 1)) + 1893473;
     }
 
     function randomRegions(total) {
       const regions = ["North America","Europe","Asia","South America","Africa","Oceania"];
-
       let weights = regions.map(() => Math.random());
       let sum = weights.reduce((a,b) => a+b, 0);
       weights = weights.map(w => w / sum);
@@ -736,9 +690,6 @@
       });
     }
 
-    /* ---------------------------
-       LOAD USER INFO
-    ---------------------------- */
     async function loadUserInfo() {
       const { data, error } = await supabase
         .from("license_keys")
@@ -769,21 +720,13 @@
       if (isNaN(currentPts)) currentPts = 0;
       tweenNumber(ptEl, currentPts, data.RGPOINTS, 5000);
 
-      // Enable Manage tab visually for Owner
       const manageBtn = document.getElementById("manageTabBtn");
       if (manageBtn) {
-        if (data.RANK === "Owner") {
-          manageBtn.classList.remove("disabled");
-        } else {
-          manageBtn.classList.add("disabled");
-        }
+        if (data.RANK === "Owner") manageBtn.classList.remove("disabled");
+        else manageBtn.classList.add("disabled");
       }
     }
 
-    /* ---------------------------
-       LEADERBOARD WITH FLIP + TWEEN
-       (EXCLUDES BLACKLISTED)
-    ---------------------------- */
     async function loadLeaderboard() {
       const { data, error } = await supabase
         .from("license_keys")
@@ -794,7 +737,6 @@
       if (error) return;
 
       const table = document.getElementById("leaderboardTable");
-
       const oldRows = {};
       Array.from(table.querySelectorAll("tr.leaderboard-row")).forEach(row => {
         const user = row.dataset.user;
@@ -829,7 +771,6 @@
           if (oldTop !== undefined) {
             const delta = oldTop - newTop;
             row.style.transform = `translateY(${delta}px)`;
-
             requestAnimationFrame(() => {
               row.style.transform = "translateY(0)";
             });
@@ -850,9 +791,6 @@
       });
     }
 
-    /* ---------------------------
-       MANAGE MEMBERS (REAL USERS)
-    ---------------------------- */
     async function loadMembers() {
       if (!currentUserRecord) return;
 
@@ -878,9 +816,6 @@
       });
     }
 
-    /* ---------------------------
-       HEARTBEAT SECURITY CHECK
-    ---------------------------- */
     async function heartbeat() {
       const { data, error } = await supabase.rpc("validate_license_key", {
         input_key: currentKey,
@@ -901,9 +836,6 @@
       logout();
     }
 
-    /* ---------------------------
-       COUNTDOWN TIMER
-    ---------------------------- */
     let countdown = 10;
     const timerEl = document.getElementById("security-timer");
 
@@ -919,9 +851,6 @@
     setInterval(updateTimer, 1000);
     heartbeat();
 
-    /* ---------------------------
-       INITIAL LOAD + INTERVALS
-    ---------------------------- */
     loadUserInfo().then(() => {
       loadLeaderboard();
       loadMembers();
@@ -933,9 +862,6 @@
     setInterval(loadMembers, 10000);
     setInterval(updateActiveMembers, 10000);
 
-    /* ---------------------------
-       LOGOUT
-    ---------------------------- */
     function logout() {
       localStorage.removeItem("rg_session");
       window.location.href = "login.html";

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Chat App</title>
+</head>
+<body>
+    <div id="auth-ui">
+        <h2>Sign Up or Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="handleSignUp()">Sign Up</button>
+        <button onclick="handleLogin()">Login</button>
+    </div>
+
+    <div id="chat-ui" style="display:none;">
+        <h3>Welcome, <span id="current-user"></span>!</h3>
+        <div id="messages"></div>
+        <input type="text" id="message-input" placeholder="Type an encrypted message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>

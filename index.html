@@ -1,1 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RG Archives – Interdimensional Library</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="RG Archives – a surreal interdimensional library of lost ideas, half-remembered websites and imaginary artifacts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #050816;
+      --bg-2: #0b1220;
+      --accent-1: #7dd3fc;
+      --accent-2: #a855f7;
+      --accent-3: #22c55e;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --glass: rgba(15,23,42,0.82);
+      --border-subtle: rgba(148,163,184,0.25);
+      --shadow-soft: 0 22px 45px rgba(15,23,42,0.7);
+      --radius-lg: 1.5rem;
+      --radius-pill: 999px;
+      --transition-fast: 180ms ease-out;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      background: radial-gradient(circle at top, #1d2440 0, #020617 55%, #000 100%);
+      color: var(--text-main);
+      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    /* ===== STARFIELD BACKGROUND ===== */
+    .starfield {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(125,211,252,0.18) 0, transparent 55%),
+        radial-gradient(circle at 80% 80%, rgba(168,85,247,0.24) 0, transparent 55%);
+      mix-blend-mode: screen;
+    }
+
+    .stars, .stars2, .stars3 {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-repeat: repeat;
+      background-position: 0 0;
+      z-index: -3;
+    }
+
+    .stars {
+      background-image: radial-gradient(1px 1px at 2px 4px, rgba(248,250,252,0.7), transparent),
+                        radial-gradient(1px 1px at 20px 30px, rgba(248,250,252,0.5), transparent),
+                        radial-gradient(1px 1px at 45px 12px, rgba(248,250,252,0.4), transparent);
+      background-size: 200px 200px;
+      animation: drift 80s linear infinite;
+      opacity: 0.9;
+    }
+
+    .stars2 {
+      background-image: radial-gradient(1px 1px at 10px 25px, rgba(148,163,184,0.9), transparent),
+                        radial-gradient(1px 1px at 50px 80px, rgba(148,163,184,0.6), transparent),
+                        radial-gradient(2px 2px at 130px 150px, rgba(244,244,245,0.7), transparent);
+      background-size: 300px 300px;
+      animation: drift 130s linear infinite reverse;
+      opacity: 0.7;
+    }
+
+    .stars3 {
+      background-image: radial-gradient(2px 2px at 80px 120px, rgba(94,234,212,0.55), transparent),
+                        radial-gradient(2px 2px at 10px 190px, rgba(251,191,36,0.55), transparent);
+      background-size: 400px 400px;
+      animation: drift 210s linear infinite;
+      opacity: 0.65;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(-200px, -200px, 0); }
+    }
+
+    /* ===== MAIN LAYOUT ===== */
+    .page {
+      width: 100%;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 3.5rem 1.4rem 3.5rem;
+    }
+
+    @media (min-width: 960px) {
+      .page {
+        padding: 4rem 3rem 4rem;
+      }
+    }
+
+    .shell {
+      max-width: 1120px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 2.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* ===== CARD / GLASS PANELS ===== */
+    .panel {
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.08), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(168,85,247,0.08), transparent 55%),
+                  var(--glass);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 1.7rem 1.6rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+    }
+
+    @media (min-width: 900px) {
+      .panel {
+        padding: 2rem 1.9rem;
+      }
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      border: 1px solid rgba(161,161,170,0.12);
+      mix-blend-mode: soft-light;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 1rem;
+      background: radial-gradient(circle at 30% 20%, rgba(248,250,252,0.95), transparent 60%),
+                  conic-gradient(from 180deg, #22c55e, #22d3ee, #6366f1, #ec4899, #22c55e);
+      position: relative;
+      box-shadow: 0 12px 25px rgba(59,130,246,0.65);
+    }
+
+    .logo-mark span {
+      font-family: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #020617;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .chip {
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.55);
+      background: rgba(15,23,42,0.75);
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: "DM Mono", ui-monospace, monospace;
+    }
+
+    .chip-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #4ade80, #16a34a);
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.18);
+    }
+
+    /* ===== HERO TEXT ===== */
+    .headline {
+      font-size: clamp(2.1rem, 2.6vw, 2.7rem);
+      line-height: 1.08;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.7rem;
+    }
+
+    .headline span {
+      background: linear-gradient(120deg, #22c55e, #2dd4bf, #e879f9, #38bdf8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subcopy {
+      font-size: 0.93rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      max-width: 34rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .subcopy-strong {
+      color: #e5e7eb;
+      font-weight: 500;
+    }
+
+    /* ===== HERO TAGS / META ===== */
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .meta-pill {
+      border-radius: var(--radius-pill);
+      padding: 0.35rem 0.75rem;
+      font-size: 0.78rem;
+      border: 1px solid rgba(148,163,184,0.55);
+      background: rgba(15,23,42,0.92);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .meta-pill span {
+      font-family: "DM Mono", ui-monospace, monospace;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+
+    .meta-pill svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.9;
+    }
+
+    /* ===== CTA AREA ===== */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn {
+      border-radius: var(--radius-pill);
+      border: 1px solid transparent;
+      padding: 0.65rem 1.15rem;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      cursor: pointer;
+      background: none;
+      color: inherit;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: radial-gradient(circle at 10% 0, rgba(248,250,252,0.18), transparent 40%),
+                  linear-gradient(120deg, #22c55e, #22d3ee, #a855f7);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 16px 35px rgba(34,197,94,0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 40px rgba(34,197,94,0.5);
+    }
+
+    .btn-ghost {
+      border-color: rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: var(--text-muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(148,163,184,0.9);
+      background: rgba(15,23,42,1);
+      transform: translateY(-1px);
+    }
+
+    .btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0.8;
+    }
+
+    .hint kbd {
+      border-radius: 0.4rem;
+      border: 1px solid rgba(148,163,184,0.7);
+      padding: 0.1rem 0.35rem;
+      font-size: 0.7rem;
+      font-family: "DM Mono", ui-monospace, monospace;
+      background: rgba(15,23,42,0.96);
+      color: #e5e7eb;
+    }
+
+    /* ===== TIMELINE / FEED ===== */
+    .timeline {
+      list-style: none;
+      margin-top: 1.6rem;
+      border-left: 1px dashed rgba(75,85,99,0.8);
+      padding-left: 1.2rem;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.1rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1.65rem;
+      top: 0.15rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 999px;
+      background: radial-gradient(circle, #22c55e, #16a34a);
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.18);
+    }
+
+    .timeline-label {
+      font-family: "DM Mono", ui-monospace, monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #a5b4fc;
+      margin-bottom: 0.17rem;
+    }
+
+    .timeline-title {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.1rem;
+    }
+
+    .timeline-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== RIGHT PANEL – INTERACTIVE ARCHIVE ===== */
+    .panel--archive {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .archive-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .archive-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      font-family: "DM Mono", ui-monospace, monospace;
+    }
+
+    .archive-indicator {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .archive-indicator-dot {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 999px;
+      background: radial-gradient(circle, #38bdf8, #0ea5e9);
+      box-shadow: 0 0 0 4px rgba(56,189,248,0.25);
+    }
+
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+    }
+
+    @media (max-width: 640px) {
+      .archive-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .artifact-card {
+      position: relative;
+      border-radius: 1.1rem;
+      border: 1px solid rgba(148,163,184,0.55);
+      padding: 0.75rem 0.8rem 0.8rem;
+      background: radial-gradient(circle at top right, rgba(56,189,248,0.12), transparent 50%),
+                  rgba(15,23,42,0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    }
+
+    .artifact-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(129,140,248,0.95);
+      box-shadow: 0 16px 30px rgba(15,23,42,0.9);
+      background: radial-gradient(circle at top left, rgba(129,140,248,0.2), transparent 55%),
+                  rgba(15,23,42,0.98);
+    }
+
+    .artifact-tag {
+      font-size: 0.65rem;
+      font-family: "DM Mono", ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #a5b4fc;
+    }
+
+    .artifact-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .artifact-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .artifact-icon {
+      position: absolute;
+      right: 0.6rem;
+      bottom: 0.5rem;
+      font-size: 1.3rem;
+      opacity: 0.5;
+    }
+
+    /* ===== ACTIVE ARTIFACT VIEWER ===== */
+    .viewer {
+      border-radius: 1.15rem;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: radial-gradient(circle at 0 0, rgba(34,197,94,0.15), transparent 60%),
+                  radial-gradient(circle at 100% 100%, rgba(129,140,248,0.25), transparent 60%),
+                  rgba(15,23,42,0.98);
+      padding: 0.9rem 0.95rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .viewer-label {
+      font-family: "DM Mono", ui-monospace, monospace;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
+    }
+
+    .viewer-label span:last-child {
+      font-size: 0.65rem;
+      opacity: 0.8;
+    }
+
+    .viewer-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .viewer-subtitle {
+      font-size: 0.78rem;
+      color: #a5b4fc;
+      font-family: "DM Mono", ui-monospace, monospace;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .viewer-body {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+
+    .viewer-body span {
+      color: #a5b4fc;
+      font-family: "DM Mono", ui-monospace, monospace;
+      font-size: 0.78rem;
+    }
+
+    .viewer-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .viewer-meta-chip {
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.8);
+      background: rgba(15,23,42,0.96);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .viewer-meta-chip svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .viewer-overlay-orbit {
+      position: absolute;
+      inset: -40%;
+      border-radius: 999px;
+      border: 1px dashed rgba(148,163,184,0.32);
+      transform: rotate(-12deg);
+      opacity: 0.32;
+      pointer-events: none;
+    }
+
+    .viewer-overlay-orbit::before,
+    .viewer-overlay-orbit::after {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #22c55e, #16a34a);
+      box-shadow: 0 0 0 5px rgba(34,197,94,0.25);
+    }
+
+    .viewer-overlay-orbit::before {
+      top: 10%;
+      left: 35%;
+    }
+
+    .viewer-overlay-orbit::after {
+      bottom: 15%;
+      right: 22%;
+      background: radial-gradient(circle, #38bdf8, #0ea5e9);
+      box-shadow: 0 0 0 5px rgba(56,189,248,0.25);
+    }
+
+    .viewer-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+    }
+
+    .viewer-btn {
+      font-size: 0.75rem;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148,163,184,0.8);
+      padding: 0.3rem 0.75rem;
+      background: rgba(15,23,42,0.98);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: "DM Mono", ui-monospace, monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      transition: background var(--transition-fast), border-color var(--transition-fast), transform var(--transition-fast);
+    }
+
+    .viewer-btn:hover {
+      background: rgba(15,23,42,1);
+      border-color: rgba(129,140,248,1);
+      transform: translateY(-1px);
+      color: #e5e7eb;
+    }
+
+    /* ===== FOOTNOTE / CREDITS ===== */
+    .footnote {
+      margin-top: 1.4rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem;
+      opacity: 0.85;
+    }
+
+    .footnote a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+
+    .footnote a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="starfield"></div>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
+  <main class="page">
+    <section class="shell">
+      <!-- LEFT PANEL -->
+      <article class="panel">
+        <header class="panel-header">
+          <div style="display:flex;align-items:center;gap:0.85rem;">
+            <div class="logo-mark"><span>RG</span></div>
+            <div>
+              <div class="chip">
+                <span class="chip-dot"></span>
+                RG ARCHIVES ONLINE
+              </div>
+              <div style="margin-top:0.25rem;font-size:0.75rem;color:var(--text-muted);">
+                Interdimensional Library of Lost Things
+              </div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-family:'DM Mono',ui-monospace,monospace;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.14em;text-transform:uppercase;">
+              Node: <span style="color:#a5b4fc;">rgarchives.xyz</span>
+            </div>
+            <div style="margin-top:0.15rem;font-size:0.72rem;color:var(--text-muted);opacity:0.85;">
+              Status: <span style="color:#4ade80;">Synced</span> • Access tier: Public
+            </div>
+          </div>
+        </header>
+
+        <div>
+          <h1 class="headline">
+            Welcome to the <span>Archive Between Worlds.</span>
+          </h1>
+          <p class="subcopy">
+            An experimental library for
+            <span class="subcopy-strong">half-remembered websites, impossible artifacts,</span>
+            and timelines that never quite happened. Every refresh surfaces a slightly
+            different version of reality.
+          </p>
+
+          <div class="meta-row">
+            <div class="meta-pill">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 5h16M6 9h12M8 13h8M10 17h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+              <span>Specimen Index v0.1</span>
+            </div>
+            <div class="meta-pill">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.4"/>
+                <path d="M12 9v4l2.2 1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+              <span>Realtime Drift Enabled</span>
+            </div>
+            <div class="meta-pill">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 10.5 11.2 6a1 1 0 0 1 1.6.8v10.4a1 1 0 0 1-1.6.8L5 13.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span>No Login. No Tracking.</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" id="btn-random">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M7 7h2.2a3 3 0 0 1 2.12.88l3.8 3.8a3 3 0 0 0 2.12.88H19" stroke="#020617" stroke-width="1.7" stroke-linecap="round"/>
+                <path d="m16 5 3 2-3 2" stroke="#020617" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7 17h2.2a3 3 0 0 0 2.12-.88l.98-.98" stroke="#020617" stroke-width="1.7" stroke-linecap="round"/>
+                <path d="m16 15 3 2-3 2" stroke="#020617" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Browse a random artifact
+            </button>
+
+            <button class="btn btn-ghost" id="btn-cycle">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 13a6 6 0 0 0 10.39 3.6L19 19M18 11A6 6 0 0 0 7.61 7.4L5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Cycle timeline
+            </button>
+          </div>
+
+          <div class="hint">
+            Press <kbd>R</kbd> to randomize • <kbd>←</kbd><kbd>→</kbd> to walk the shelves
+          </div>
+        </div>
+
+        <ul class="timeline" id="timeline">
+          <!-- Timeline nodes injected by JS -->
+        </ul>
+
+        <div class="footnote">
+          <div>
+            <strong>Disclaimer:</strong>
+            Everything here is fictional, but you are invited to pretend otherwise.
+          </div>
+          <div>
+            Node maintained by <a href="https://rgarchives.xyz" target="_blank" rel="noreferrer">rgarchives.xyz</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- RIGHT PANEL: ARCHIVE -->
+      <aside class="panel panel--archive">
+        <header class="archive-header">
+          <div>
+            <div class="archive-title">Active Shelf: PUBLIC / SPECIMENS</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.1rem;">
+              Click any cell to load its contents into the viewer.
+            </div>
+          </div>
+          <div class="archive-indicator">
+            <span class="archive-indicator-dot"></span>
+            <span id="archive-count">0 artifacts</span>
+          </div>
+        </header>
+
+        <div class="archive-grid" id="archive-grid">
+          <!-- Cards injected by JS -->
+        </div>
+
+        <section class="viewer" aria-live="polite">
+          <div class="viewer-overlay-orbit" aria-hidden="true"></div>
+          <div class="viewer-label">
+            <span id="viewer-id">ARTIFACT — ???</span>
+            <span id="viewer-coord">COORD: ∅.∅.∅</span>
+          </div>
+          <div class="viewer-title" id="viewer-title">
+            Select an artifact from the grid to begin browsing.
+          </div>
+          <div class="viewer-subtitle" id="viewer-subtitle">
+            —
+          </div>
+          <p class="viewer-body" id="viewer-body">
+            The RG Archives are currently idle. Choose a tile on the right or press
+            <span>R</span> on your keyboard to surface a random specimen from an adjacent
+            reality.
+          </p>
+          <div class="viewer-meta" id="viewer-meta">
+            <!-- Meta chips injected by JS -->
+          </div>
+          <div class="viewer-actions">
+            <button class="viewer-btn" id="btn-glitch">
+              glitch view
+            </button>
+            <button class="viewer-btn" id="btn-reset">
+              reset
+            </button>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    // Core data: artifact definitions
+    const ARTIFACTS = [
+      {
+        id: "A-01.γ",
+        name: "404 Sanctuary",
+        tag: "LOST WEBPAGE",
+        icon: "⟡",
+        short: "A refuge for abandoned links and orphaned domains.",
+        body: "A ghost-site that only appears when a broken link truly meant something to its author. Visitors report a soft hiss, a list of URLs that never launched, and a polite prompt asking what you were hoping to find instead.",
+        coords: "0x404 / 0xSANCT / 0xARY",
+        era: "Late Broken-Link Epoch",
+        confidence: "62% reconstructed",
+        hazard: "Benign melancholy",
+        flags: ["anachronism", "network folklore"]
+      },
+      {
+        id: "B-13.λ",
+        name: "Infinite Scroll That Ends",
+        tag: "PARADOX UX",
+        icon: "∞",
+        short: "A feed that anticipates your final swipe with eerie accuracy.",
+        body: "This interface presents an apparently endless feed, yet always concludes on a post that feels like a closing remark to your day. Attempts to refresh merely offer alternate endings.",
+        coords: "13 / UX / LIMINAL",
+        era: "Speculative Interface Cycle",
+        confidence: "41% field notes",
+        hazard: "Mild existential clarity",
+        flags: ["interaction anomaly"]
+      },
+      {
+        id: "C-07.β",
+        name: "The Comment Section That Agreed",
+        tag: "IMPOSSIBLE FORUM",
+        icon: "◎",
+        short: "Every thread resolves into consensus without losing nuance.",
+        body: "Recovered from a branch where online discourse evolved cooperative norms. Arguments arc toward synthesis; the top-voted reply is usually some variant of “I hadn’t considered that.”",
+        coords: "7 / FORUM / PRIME",
+        era: "Polite Timeline (Disputed)",
+        confidence: "23% rumor, 77% wishful thinking",
+        hazard: "May alter expectations of conversation elsewhere",
+        flags: ["social anomaly", "too good to be true"]
+      },
+      {
+        id: "D-22.ζ",
+        name: "Tab You Swear You Just Had Open",
+        tag: "PERSONAL MANIFEST",
+        icon: "✶",
+        short: "A browser tab containing the exact thing you meant to work on.",
+        body: "This artifact manifests during focus sprints, always containing the ideal starting point: a clean outline, an empty editor, or a perfectly minimal todo list. Closing it without action causes it to reappear in another timeline.",
+        coords: "22 / FOCUS / FRAG",
+        era: "Productivity Boom (Local)",
+        confidence: "88% anecdotal, 12% telemetry",
+        hazard: "Gentle guilt field",
+        flags: ["productivity", "temporal echo"]
+      },
+      {
+        id: "E-09.φ",
+        name: "Night Mode Before Night",
+        tag: "INTERFACE GHOST",
+        icon: "☾",
+        short: "Dark theme that enables itself 7 minutes before you need it.",
+        body: "Spotted across prototypical apps that were never released. The interface quietly dims just before eyestrain would have occurred. On capture attempts, the setting reverts to 'Auto'.",
+        coords: "9 / UI / PREEMPT",
+        era: "Kind Design Tradition",
+        confidence: "54% screenshots",
+        hazard: "None, recommended",
+        flags: ["gentle", "ergonomic myth"]
+      },
+      {
+        id: "F-31.κ",
+        name: "The Single Perfect Bookmark",
+        tag: "ANCHOR OBJECT",
+        icon: "⩩",
+        short: "One saved link that leads you back to every project you abandoned.",
+        body: "Upon opening, it reshapes its contents into exactly the index you forgot to build: drafts, ideas, half-finished experiments. Closing it without noting anything causes a small, localized loss of motivation.",
+        coords: "31 / BOOK / CORE",
+        era: "Proto-Archive Era",
+        confidence: "67% reconstructed from sync logs",
+        hazard: "Inspiration whiplash",
+        flags: ["archive", "personal"]
+      },
+      {
+        id: "G-02.ψ",
+        name: "Status Page That Actually Explains",
+        tag: "RARE INFRA",
+        icon: "☍",
+        short: "Plain-language outage reports that admit what really happened.",
+        body: "Each incident card contains a technical explanation, a simple story, and a small apology. Readers consistently report feeling \"oddly respected\".",
+        coords: "2 / SRE / HONEST",
+        era: "Transparent Operations Window",
+        confidence: "79% screenshots, 21% legend",
+        hazard: "May raise expectations for status pages forever",
+        flags: ["infra", "communication"]
+      },
+      {
+        id: "H-44.ω",
+        name: "The Page That Loads Instantly",
+        tag: "PERFORMANCE RELIC",
+        icon: "⚡",
+        short: "No skeleton loaders. No spinners. Just content.",
+        body: "Historians disagree whether this page was static, pre-rendered, or simply lucky. Lighthouse refuses to score it, returning instead a quiet thumbs-up emoji.",
+        coords: "44 / PERF / IDEAL",
+        era: "Hypothetical Best Practice",
+        confidence: "5% hard data, 95% faith",
+        hazard: "Spoils you for other sites",
+        flags: ["performance", "legendary"]
+      }
+    ];
+
+    const TIMELINE_EVENTS = [
+      {
+        label: "LOG ENTRY: 00:00:01",
+        title: "Archive node rgarchives.xyz comes online.",
+        desc: "Public mirror synced. Boundary between fiction and infrastructure intentionally left misconfigured."
+      },
+      {
+        label: "DISCOVERY: 00:03:47",
+        title: "First cross-timeline ping detected.",
+        desc: "A browser somewhere tried to load a page that never existed here, only next door. Trace stored as artifact candidate."
+      },
+      {
+        label: "MIGRATION: 00:07:12",
+        title: "Orphaned concepts rerouted.",
+        desc: "Ideas abandoned in draft folders re-encoded as browseable specimens, tagged for gentle retrieval."
+      },
+      {
+        label: "STATUS: 00:13:37",
+        title: "User curiosity threshold exceeded.",
+        desc: "If you are reading this, you are now part of the indexing process. Your interpretations are considered write-access."
+      }
+    ];
+
+    // State
+    let activeIndex = null;
+    let glitchMode = false;
+
+    // Helpers
+    const byId = (id) => document.getElementById(id);
+    const randInt = (max) => Math.floor(Math.random() * max);
+
+    // Render archive grid
+    function renderArchiveGrid() {
+      const container = byId("archive-grid");
+      container.innerHTML = "";
+
+      ARTIFACTS.forEach((artifact, index) => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "artifact-card";
+        card.setAttribute("data-index", String(index));
+
+        card.innerHTML = `
+          <div class="artifact-tag">${artifact.tag}</div>
+          <div class="artifact-name">${artifact.name}</div>
+          <div class="artifact-meta">${artifact.short}</div>
+          <div class="artifact-icon">${artifact.icon}</div>
+        `;
+
+        card.addEventListener("click", () => setActiveArtifact(index));
+        container.appendChild(card);
+      });
+
+      const countLabel = byId("archive-count");
+      countLabel.textContent = `${ARTIFACTS.length} artifacts indexed`;
+    }
+
+    // Render timeline
+    function renderTimeline() {
+      const container = byId("timeline");
+      container.innerHTML = "";
+      TIMELINE_EVENTS.forEach((event) => {
+        const li = document.createElement("li");
+        li.className = "timeline-item";
+        li.innerHTML = `
+          <div class="timeline-dot"></div>
+          <div class="timeline-label">${event.label}</div>
+          <div class="timeline-title">${event.title}</div>
+          <p class="timeline-desc">${event.desc}</p>
+        `;
+        container.appendChild(li);
+      });
+    }
+
+    // Set active artifact in viewer
+    function setActiveArtifact(index) {
+      const artifact = ARTIFACTS[index];
+      if (!artifact) return;
+      activeIndex = index;
+
+      byId("viewer-id").textContent = `ARTIFACT — ${artifact.id}`;
+      byId("viewer-title").textContent = artifact.name;
+      byId("viewer-subtitle").textContent = artifact.tag;
+      byId("viewer-body").innerHTML = `
+        ${artifact.body}
+      `;
+
+      const meta = byId("viewer-meta");
+      meta.innerHTML = "";
+
+      const chip = (label, value, iconSvg) => {
+        const span = document.createElement("div");
+        span.className = "viewer-meta-chip";
+        span.innerHTML = `
+          ${iconSvg || ""}
+          <span>${label}: ${value}</span>
+        `;
+        return span;
+      };
+
+      meta.appendChild(chip("Coords", artifact.coords, `
+        <svg viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M12 9v3.8l2 1.2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      `));
+      meta.appendChild(chip("Era", artifact.era, `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M12 5v14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      `));
+      meta.appendChild(chip("Confidence", artifact.confidence, `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 13 9.5 18.5 20 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      `));
+      meta.appendChild(chip("Hazard", artifact.hazard, `
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v.01M12 9v10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      `));
+
+      if (artifact.flags?.length) {
+        meta.appendChild(chip("Flags", artifact.flags.join(", "), `
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M6 4v15M8 5h7.5L15 9h3L16 13H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        `));
+      }
+
+      byId("viewer-coord").textContent = `COORD: ${artifact.coords}`;
+    }
+
+    // Random artifact
+    function randomArtifact() {
+      const idx = randInt(ARTIFACTS.length);
+      setActiveArtifact(idx);
+    }
+
+    // Cycle timeline (rotate events)
+    function cycleTimeline() {
+      const first = TIMELINE_EVENTS.shift();
+      TIMELINE_EVENTS.push(first);
+      renderTimeline();
+    }
+
+    // Glitch effect
+    function toggleGlitch() {
+      glitchMode = !glitchMode;
+      document.body.style.filter = glitchMode ? "contrast(1.05) saturate(1.1)" : "none";
+
+      const viewer = document.querySelector(".viewer");
+      if (!viewer) return;
+
+      if (glitchMode) {
+        viewer.style.animation = "glitch-breath 1s infinite alternate";
+        viewer.style.boxShadow = "0 0 0 1px rgba(56,189,248,0.5)";
+      } else {
+        viewer.style.animation = "none";
+        viewer.style.boxShadow = "none";
+      }
+    }
+
+    // Reset viewer
+    function resetViewer() {
+      activeIndex = null;
+      glitchMode = false;
+      document.body.style.filter = "none";
+
+      byId("viewer-id").textContent = "ARTIFACT — ???";
+      byId("viewer-title").textContent = "Select an artifact from the grid to begin browsing.";
+      byId("viewer-subtitle").textContent = "—";
+      byId("viewer-body").innerHTML =
+        'The RG Archives are currently idle. Choose a tile on the right or press <span>R</span> on your keyboard to surface a random specimen from an adjacent reality.';
+      byId("viewer-meta").innerHTML = "";
+      byId("viewer-coord").textContent = "COORD: ∅.∅.∅";
+
+      const viewer = document.querySelector(".viewer");
+      if (viewer) {
+        viewer.style.animation = "none";
+        viewer.style.boxShadow = "none";
+      }
+    }
+
+    // Key bindings
+    function handleKey(e) {
+      const key = e.key.toLowerCase();
+      if (key === "r") {
+        e.preventDefault();
+        randomArtifact();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        if (activeIndex === null) {
+          setActiveArtifact(0);
+        } else {
+          setActiveArtifact((activeIndex + 1) % ARTIFACTS.length);
+        }
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        if (activeIndex === null) {
+          setActiveArtifact(ARTIFACTS.length - 1);
+        } else {
+          setActiveArtifact((activeIndex - 1 + ARTIFACTS.length) % ARTIFACTS.length);
+        }
+      }
+    }
+
+    // Tiny CSS glitch animation injected at runtime to keep styles grouped
+    (function injectGlitchAnimation() {
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes glitch-breath {
+          0% { transform: translate3d(0,0,0) scale(1); filter: hue-rotate(0deg); }
+          45% { transform: translate3d(-1px,1px,0) scale(1.003); filter: hue-rotate(6deg); }
+          50% { transform: translate3d(1px,-1px,0) scale(1.005); }
+          100% { transform: translate3d(0,0,0) scale(1); filter: hue-rotate(-4deg); }
+        }
+      `;
+      document.head.appendChild(style);
+    })();
+
+    // Wire up events
+    document.addEventListener("DOMContentLoaded", () => {
+      renderArchiveGrid();
+      renderTimeline();
+
+      byId("btn-random").addEventListener("click", randomArtifact);
+      byId("btn-cycle").addEventListener("click", cycleTimeline);
+      byId("btn-glitch").addEventListener("click", toggleGlitch);
+      byId("btn-reset").addEventListener("click", resetViewer);
+
+      document.addEventListener("keydown", handleKey);
+    });
+  </script>
+</body>
+</html>
